@@ -1,3 +1,4 @@
+;
 /*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
@@ -14,11 +15,15 @@ function uuid () {
 
 	var uuid = s.join("");
 	return uuid;
-}
+};
 
-function using (obj, f) {
-  return f.call(obj, obj);
-}
+function using () {
+  var args = Array.toArray(arguments);
+  var f = args.splice(args.length-1, 1);
+  if (typeof f !== 'function') return;
+  
+  return f.apply(args[0], args);
+};
 
 function extend (object, overwrite) {
   
@@ -37,31 +42,53 @@ function extend (object, overwrite) {
       
       return object;
     },
-    withMixin: function (mixinCtor) {
-      return this.with(new mixinCtor);
+    mixin: function (mixin) {
+      return typeof mixin === 'function' ? this.with(new mixin) : this.with(mixin);
     }
   };
-}
+};
 
 function overwrite (object) {
   return extend(object, true);
-}
+};
 
 // for use with option enabled methods
 function defaultsFor (options, defaults) {
   return extend(options).with(defaults);
-} 
+};
 
-function proxyFunction(context, phunction) {
+function proxyFunction (context, phunction) {
   return function () {
     return phunction.apply(context, arguments);
   };
+};
+
+function override (f, g) {
+  return function () {
+    var thiz = this;
+    var args = Array.toArray(arguments);
+    
+    args.unshift(function () {
+      var baseArgs = (arguments.length > 0) ? Array.toArray(arguments) : args.slice(1);
+      return f.apply(thiz, baseArgs);
+    });
+    
+    return g.apply(thiz, args);
+  }
 }
+
+function shallowCopy (obj) {
+  return jQuery.extend({}, obj);
+};
+
+function deepCopy (obj) {
+  return jQuery.extend(true, {}, obj);
+};
 
 function NotImplemented () {
   throw "Not Implemented";
-}
+};
 
 function TODO (thing) {
   console.warn("TODO" + thing ? (": " + thing) : '');
-}
+};

@@ -108,3 +108,65 @@ describe('proxy functions', function () {
     fProxy();
   });
 });
+
+describe('override(f, g)', function () {
+  var obj = {}, g, fThis, gThis;
+  beforeEach(function () {
+    obj.f = function () {
+      fThis = this;
+    }
+    g = function (base) {
+      base()
+      gThis = this;
+    }
+  })
+  
+  it('runs f in the context of the owner', function () {
+    obj.ovrd = override(obj.f, function (base) {
+      base()
+    });
+    
+    obj.ovrd();
+    expect(fThis).toBe(obj);
+  });
+  it('runs g in the context of the owner', function () {
+    obj.ovrd = override(obj.f, g);
+    
+    obj.ovrd();
+    expect(gThis).toBe(obj);
+  });
+  it('calls g with the first argument f and any other arguments after', function () {
+    var args;
+    var ovrd = override(obj.f, function (base) {
+      base();
+      args = Array.toArray(arguments);
+    });
+    
+    ovrd(1,2,3,4,5,6,7,8);
+    expect(args.length).toEqual(9);
+  });
+  it('base() call automatically passes override args', function () {
+    var args;
+    var ovrd = override(function () {
+      args = Array.toArray(arguments);
+    }, function (base) {
+      base();
+      
+    });
+    
+    ovrd(1,2,3,4,5,6,7,8);
+    expect(args.length).toEqual(8);
+  });
+  it('base() call with arguments passes overridden arguments', function () {
+    var args;
+    var ovrd = override(function () {
+      args = Array.toArray(arguments);
+    }, function (base) {
+      base(3,2,1);
+      
+    });
+    
+    ovrd(1,2,3,4,5,6,7,8);
+    expect(args.length).toEqual(3);
+  })
+});

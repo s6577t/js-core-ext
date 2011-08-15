@@ -1,7 +1,32 @@
 /*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
-;(function () {
+delete(function () {
+  
+  supplement.defineMethod(String.prototype, 'isUpperCase', function () {
+    return this.toLowerCase() != this;
+  });
+  
+  supplement.defineMethod(String.prototype, 'isLowerCase', function () {
+    return this.toUpperCase() != this;
+  });
+  
+  supplement.defineMethod(String.prototype, 'decamelize', function () {
+    var chrs = [];
+    
+    for (var i = 0, j = 1; i < this.length; i++, j++) {
+      var cur = this[i];
+      var next = this[j];
+      
+      chrs.push(cur);
+      
+      if (next && next.isUpperCase() && /[a-zA-Z\d]/.test(cur)) {
+        chrs.push(' ');
+      }
+    }
+        
+    return chrs.join('');
+  });
 
   supplement.defineMethod(String.prototype, 'startsWith', function(s) {
     return new RegExp('^'+s).test(this);
