@@ -63,19 +63,39 @@ function proxyFunction (context, phunction) {
   };
 };
 
-function override (f, g) {
-  return function () {
-    var thiz = this;
-    var args = Array.toArray(arguments);
-    
-    args.unshift(function () {
-      var baseArgs = (arguments.length > 0) ? Array.toArray(arguments) : args.slice(1);
-      return f.apply(thiz, baseArgs);
-    });
-    
-    return g.apply(thiz, args);
+override = (function () {
+  function ovrdFunction (f, g) {
+    return function () {
+      var thiz = this;
+      var args = Array.toArray(arguments);
+
+      args.unshift(function () {
+        var baseArgs = (arguments.length > 0) ? Array.toArray(arguments) : args.slice(1);
+        return f.apply(thiz, baseArgs);
+      });
+
+      return g.apply(thiz, args);
+    }
   }
-}
+  
+  function ovrdObj (obj, overrides) {
+    for (var o in overrides) {
+      if (typeof obj[o] === 'function' && typeof overrides[o] === 'function') {
+        obj[o] = ovrdFunction(obj[o], overrides[o]);
+      } else {
+        throw new Error('no function to override: ' + o);
+      }
+    }
+    return obj;
+  }
+
+  return function (a, b) {
+    if (typeof a === 'function' && typeof b === 'function') {
+      return ovrdFunction(a, b);
+    } 
+    return ovrdObj(a, b);
+  }
+})();
 
 function shallowCopy (obj) {
   return jQuery.extend({}, obj);

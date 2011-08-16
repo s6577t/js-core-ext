@@ -29,4 +29,12 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
     return this.length === 0;
   });
   
+  supplement.defineMethod(Array.prototype, 'first', function (obj) {
+    return this[0];
+  });
+  
+  supplement.defineMethod(Array.prototype, 'last', function (obj) {
+    return this[this.length - 1];
+  });
+  
 })();

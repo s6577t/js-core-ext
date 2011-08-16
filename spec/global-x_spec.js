@@ -170,3 +170,26 @@ describe('override(f, g)', function () {
     expect(args.length).toEqual(3);
   })
 });
+
+describe('overriding an objects methods', function () {
+  it('should call the override with the a reference to the base function', function () {
+    var called = false;
+    var obj = {
+      f: function () {
+        called = true;
+      }
+    }
+    var ortn = override(obj, { 
+      f: function (base) {
+        base();
+        return 'meow'
+      }
+    });
+    
+    var rtn = obj.f();
+    
+    expect(called).toEqual(true);
+    expect(rtn).toEqual('meow');
+    expect(ortn).toBe(obj);
+  })
+})
