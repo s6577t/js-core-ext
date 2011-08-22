@@ -122,7 +122,7 @@ describe('override(f, g)', function () {
   })
   
   it('runs f in the context of the owner', function () {
-    obj.ovrd = override(obj.f, function (base) {
+    obj.ovrd = override(obj.f).with(function (base) {
       base()
     });
     
@@ -130,14 +130,14 @@ describe('override(f, g)', function () {
     expect(fThis).toBe(obj);
   });
   it('runs g in the context of the owner', function () {
-    obj.ovrd = override(obj.f, g);
+    obj.ovrd = override(obj.f).with(g);
     
     obj.ovrd();
     expect(gThis).toBe(obj);
   });
   it('calls g with the first argument f and any other arguments after', function () {
     var args;
-    var ovrd = override(obj.f, function (base) {
+    var ovrd = override(obj.f).with(function (base) {
       base();
       args = Array.toArray(arguments);
     });
@@ -149,7 +149,7 @@ describe('override(f, g)', function () {
     var args;
     var ovrd = override(function () {
       args = Array.toArray(arguments);
-    }, function (base) {
+    }).with(function (base) {
       base();
       
     });
@@ -161,7 +161,7 @@ describe('override(f, g)', function () {
     var args;
     var ovrd = override(function () {
       args = Array.toArray(arguments);
-    }, function (base) {
+    }).with(function (base) {
       base(3,2,1);
       
     });
@@ -179,7 +179,7 @@ describe('overriding an objects methods', function () {
         called = true;
       }
     }
-    var ortn = override(obj, { 
+    var ortn = override(obj).with({ 
       f: function (base) {
         base();
         return 'meow'

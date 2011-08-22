@@ -60,5 +60,13 @@ delete(function () {
       typeof replacement === 'boolean' 
       ? replacement : target;
     });
+  });
+  
+  supplement.defineMethod(String.prototype, 'toFloat', function () {
+    return parseFloat(this);
+  });
+  
+  supplement.defineMethod(String.prototype, 'toInteger', function () {
+    return parseInt(this);
   });  
 })()
