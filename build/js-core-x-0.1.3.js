@@ -1010,11 +1010,15 @@ override = (function () {
     return obj;
   }
 
-  return function (a, b) {
-    if (typeof a === 'function' && typeof b === 'function') {
-      return ovrdFunction(a, b);
-    } 
-    return ovrdObj(a, b);
+  return function (a) {
+    return {
+      with: function (b) {
+        if (typeof a === 'function' && typeof b === 'function') {
+          return ovrdFunction(a, b);
+        } 
+        return ovrdObj(a, b);
+      }
+    }
   }
 })();
 
