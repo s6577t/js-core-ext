@@ -1,5 +1,16 @@
 describe('when an object is extended', function () {
   
+  describe('with a prefix', function () {
+    it("should gain members and their names have prefix", function() {
+      var obj = {}
+      var obj2 = {name: 'Boris'};
+      
+      extend(obj, {prefix: '_meow_'}).with(obj2);
+      
+      expect(obj._meow_name).toEqual('Boris');
+    });
+  })
+  
   it('it gains members of the extensions', function () {
     var obj = {
       member1: 'member1'

@@ -25,8 +25,9 @@ function using () {
   return f.apply(args[0], args);
 };
 
-function extend (object, overwrite) {
+function extend (object, options) {
   
+  options = options || {};
   object = object || {};
   
   return {
@@ -34,8 +35,9 @@ function extend (object, overwrite) {
       
       Array.toArray(arguments).forEach(function(other) {
         for (var member in other) {
-          if (overwrite || (typeof object[member] === 'undefined')) {
-            object[member] = other[member];
+          if (options.overwrite || (typeof object[member] === 'undefined')) {
+            var name = (typeof options.prefix === 'undefined' || options.prefix === null) ? member : "" + options.prefix + member;
+            object[name] = other[member];
           }           
         }
       });
@@ -49,7 +51,7 @@ function extend (object, overwrite) {
 };
 
 function overwrite (object) {
-  return extend(object, true);
+  return extend(object, {overwrite: true});
 };
 
 // for use with option enabled methods
