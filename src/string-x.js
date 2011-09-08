@@ -28,6 +28,35 @@ delete(function () {
     return chrs.join('');
   });
 
+  supplement.defineMethod(String.prototype, 'variableize', function (globalName) {
+    var matches = this.split(/([^a-z])/g)
+    var parts = [];
+        
+    for (var i = 0; i < matches.length; i++) {
+      var match = matches[i];
+      if (!match) continue;
+      
+      if (match.match(/^[A-Z]$/)) {
+        var str = match + matches[++i];
+        parts.push(str);
+      } else if (match.match(/[-_]/)) {
+        parts.push(matches[++i].titleize());
+      } else {
+        parts.push(match);
+      }
+    }
+    
+    var str = parts.join('');
+
+    if (str[0]) {
+      str = str.split('');
+      str[0] = globalName ? str[0].toUpperCase() : str[0].toLowerCase();
+      str = str.join('');
+    }
+    
+    return str;    
+  });  
+
   supplement.defineMethod(String.prototype, 'startsWith', function(s) {
     return new RegExp('^'+s).test(this);
   });

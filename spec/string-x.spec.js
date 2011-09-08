@@ -1,0 +1,28 @@
+describe('string x', function () {
+  describe('variableize', function () {
+    
+    it("should lowerCamelize names-and-namespaces-like-this", function() {
+      expect('names-and-namespaces-like-this'.variableize()).toEqual('namesAndNamespacesLikeThis');
+    });
+
+    it("should lowerCamelize NamesAndNamespacesLikeThis", function() {
+      expect('NamesAndNamespacesLikeThis'.variableize()).toEqual('namesAndNamespacesLikeThis');
+    });
+
+    it("should lowerCamelize names_like_this", function() {
+      expect('names_like_this'.variableize()).toEqual('namesLikeThis');
+    });
+
+    it("should lowerCamelize namesLikeThis", function() {
+      expect('namesLikeThis'.variableize()).toEqual('namesLikeThis');
+    });
+    
+    it('should return "" on ""', function () {
+      expect(''.variableize()).toEqual('');
+    })
+    
+    it("should UpperCamelize namesLikeThis when passing true", function() {
+      expect('namesLikeThis'.variableize(true)).toEqual('NamesLikeThis');
+    });
+  })
+})
