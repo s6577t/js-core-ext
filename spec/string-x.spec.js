@@ -24,5 +24,13 @@ describe('string x', function () {
     it("should UpperCamelize namesLikeThis when passing true", function() {
       expect('namesLikeThis'.variableize(true)).toEqual('NamesLikeThis');
     });
+    
+    it("should lower camelize names like this", function () {
+      expect('names like this'.variableize()).toEqual('namesLikeThis');
+    });
+    
+    it('should prepend an underscore to avoid starting with a number', function () {
+      expect('123'.variableize()).toEqual('_123');
+    })
   })
 })

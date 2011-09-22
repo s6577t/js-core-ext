@@ -5,7 +5,7 @@ describe('when an object is extended', function () {
       var obj = {}
       var obj2 = {name: 'Boris'};
       
-      extend(obj, {prefix: '_meow_'}).with(obj2);
+      extend(obj, {prefix: '_meow_'}).withObject(obj2);
       
       expect(obj._meow_name).toEqual('Boris');
     });
@@ -24,7 +24,7 @@ describe('when an object is extended', function () {
       member3: 'member3'
     };
     
-    extend(obj).with(obj2, obj3);
+    extend(obj).withObject(obj2, obj3);
     
     expect(obj.member1).toEqual('member1');
     expect(obj.member2).toEqual('member2');
@@ -44,7 +44,7 @@ describe('when an object is extended', function () {
       member2: 'member2obj3'
     };
     
-    extend(obj).with(obj2, obj3);
+    extend(obj).withObject(obj2, obj3);
     
     expect(obj.member1).toEqual('member1');
     expect(obj.member2).toEqual('member2');
@@ -59,19 +59,19 @@ describe('when an object is extended', function () {
       member1: 'member1obj2'
     };
     
-    extend(obj).with(obj2);
+    extend(obj).withObject(obj2);
     
     expect(obj.member1).toEqual('member1');
   });
   
   it('with returns the target object', function () {
     var obj = {};
-    var result = extend(obj).with();
+    var result = extend(obj).withObject();
     expect(result).toBe(obj);
   });
   
   it('returns a new object if no object is passed to extend', function () {
-    var obj = extend().with();
+    var obj = extend().withObject();
     expect(obj).not.toBeNull();
   });
 });
@@ -91,19 +91,10 @@ describe('when an object is overwitten', function () {
       member2: 'member2obj3'
     };
     
-    overwrite(obj).with(obj2, obj3);
+    overwrite(obj).withObject(obj2, obj3);
     
     expect(obj.member1).toEqual('member1obj2');
     expect(obj.member2).toEqual('member2obj3');
-  });
-});
-
-describe('when calling using with an object and function', function () {
-  it ('calls the function in the context of that object', function () {
-   var obj = {};
-   using(obj, function () {
-     expect(this).toBe(obj);
-   }); 
   });
 });
 
@@ -133,7 +124,7 @@ describe('override(f, g)', function () {
   })
   
   it('runs f in the context of the owner', function () {
-    obj.ovrd = override(obj.f).with(function (base) {
+    obj.ovrd = override(obj.f).withObject(function (base) {
       base()
     });
     
@@ -141,14 +132,14 @@ describe('override(f, g)', function () {
     expect(fThis).toBe(obj);
   });
   it('runs g in the context of the owner', function () {
-    obj.ovrd = override(obj.f).with(g);
+    obj.ovrd = override(obj.f).withObject(g);
     
     obj.ovrd();
     expect(gThis).toBe(obj);
   });
   it('calls g with the first argument f and any other arguments after', function () {
     var args;
-    var ovrd = override(obj.f).with(function (base) {
+    var ovrd = override(obj.f).withObject(function (base) {
       base();
       args = Array.toArray(arguments);
     });
@@ -160,7 +151,7 @@ describe('override(f, g)', function () {
     var args;
     var ovrd = override(function () {
       args = Array.toArray(arguments);
-    }).with(function (base) {
+    }).withObject(function (base) {
       base();
       
     });
@@ -172,7 +163,7 @@ describe('override(f, g)', function () {
     var args;
     var ovrd = override(function () {
       args = Array.toArray(arguments);
-    }).with(function (base) {
+    }).withObject(function (base) {
       base(3,2,1);
       
     });
@@ -190,7 +181,7 @@ describe('overriding an objects methods', function () {
         called = true;
       }
     }
-    var ortn = override(obj).with({ 
+    var ortn = override(obj).withObject({ 
       f: function (base) {
         base();
         return 'meow'

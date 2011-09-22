@@ -1,7 +1,7 @@
 /*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
-delete(function () {
+(function () {
   
   supplement.defineMethod(String.prototype, 'isUpperCase', function () {
     return this.toLowerCase() != this;
@@ -29,7 +29,9 @@ delete(function () {
   });
 
   supplement.defineMethod(String.prototype, 'variableize', function (globalName) {
-    var matches = this.split(/([^a-z])/g)
+    var input = this;
+        
+    var matches = input.split(/([^a-z])/g)
     var parts = [];
         
     for (var i = 0; i < matches.length; i++) {
@@ -46,15 +48,24 @@ delete(function () {
       }
     }
     
-    var str = parts.join('');
+    var str = parts.filter(function (s) {
+      return !s.match(/\s+/g) 
+    }).map(function (s) {
+      return s.titleize()
+    }).join('');
 
     if (str[0]) {
       str = str.split('');
       str[0] = globalName ? str[0].toUpperCase() : str[0].toLowerCase();
       str = str.join('');
     }
-    
-    return str;    
+
+    // if it starts with a number
+    if (str.match(/^\d.*/)) {
+      str = '_' + str;
+    }
+
+    return str;
   });  
 
   supplement.defineMethod(String.prototype, 'startsWith', function(s) {
@@ -98,4 +109,53 @@ delete(function () {
   supplement.defineMethod(String.prototype, 'toInteger', function () {
     return parseInt(this);
   });  
+  
+  /*
+    This function adds ordinalize support to every String object
+      Signature:
+        String.ordinalize() == String
+      Arguments:
+        N/A
+      Returns:
+        String - renders all found numbers their sequence like "22nd"
+      Examples:
+        "the 1 pitch".ordinalize() == "the 1st pitch"
+  */
+  supplement.defineMethod(String.prototype, 'ordinalize', function () {
+    
+    var self = this;
+    var words = self.split(/\s+/);
+    
+    for (var i = 0; i < words.length; i++) {
+        
+        var word = words[i];
+        var match = /^\d+$/.exec(word)
+        
+        if (match) {
+          var number = parseInt(match[0]);
+
+          var penultimateDigit = word[word.length-2]
+          var lastDigit = word[word.length-1];
+          var suffix = "th";
+          
+          if (!penultimateDigit || penultimateDigit !== "1") {
+            switch(lastDigit) {
+              case "1":
+                suffix = 'st';
+                break;
+              case "2":
+                suffix = 'nd';
+                break;
+              case "3":
+                suffix = 'rd';
+                break;
+              default:
+            }
+          }
+          words[i] += suffix;
+        }
+    }
+    self = words.join(' ');
+    return self;
+  });
 })()

@@ -1341,7 +1341,9 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
   });
 
   supplement.defineMethod(String.prototype, 'variableize', function (globalName) {
-    var matches = this.split(/([^a-z])/g)
+    var input = this;
+        
+    var matches = input.split(/([^a-z])/g)
     var parts = [];
         
     for (var i = 0; i < matches.length; i++) {
@@ -1358,15 +1360,24 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
       }
     }
     
-    var str = parts.join('');
+    var str = parts.filter(function (s) {
+      return !s.match(/\s+/g) 
+    }).map(function (s) {
+      return s.titleize()
+    }).join('');
 
     if (str[0]) {
       str = str.split('');
       str[0] = globalName ? str[0].toUpperCase() : str[0].toLowerCase();
       str = str.join('');
     }
-    
-    return str;    
+
+    // if it starts with a number
+    if (str.match(/^\d.*/)) {
+      str = '_' + str;
+    }
+
+    return str;
   });  
 
   supplement.defineMethod(String.prototype, 'startsWith', function(s) {

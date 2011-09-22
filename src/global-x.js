@@ -17,21 +17,13 @@ function uuid () {
 	return uuid;
 };
 
-function using () {
-  var args = Array.toArray(arguments);
-  var f = args.splice(args.length-1, 1);
-  if (typeof f !== 'function') return;
-  
-  return f.apply(args[0], args);
-};
-
 function extend (object, options) {
   
   options = options || {};
   object = object || {};
   
   return {
-    with: function () {
+    withObject: function () {
       
       Array.toArray(arguments).forEach(function(other) {
         for (var member in other) {
@@ -45,7 +37,7 @@ function extend (object, options) {
       return object;
     },
     mixin: function (mixin) {
-      return typeof mixin === 'function' ? this.with(new mixin) : this.with(mixin);
+      return typeof mixin === 'function' ? this.withObject(new mixin) : this.withObject(mixin);
     }
   };
 };
@@ -56,7 +48,7 @@ function overwrite (object) {
 
 // for use with option enabled methods
 function defaultsFor (options, defaults) {
-  return extend(options).with(defaults);
+  return extend(options).withObject(defaults);
 };
 
 function proxyFunction (context, phunction) {
@@ -93,7 +85,7 @@ override = (function () {
 
   return function (a) {
     return {
-      with: function (b) {
+      withObject: function (b) {
         if (typeof a === 'function' && typeof b === 'function') {
           return ovrdFunction(a, b);
         } 
@@ -113,8 +105,4 @@ function deepCopy (obj) {
 
 function NotImplemented () {
   throw "Not Implemented";
-};
-
-function TODO (thing) {
-  console.warn("TODO" + thing ? (": " + thing) : '');
 };
