@@ -1,6 +1,6 @@
 describe('string x', function () {
   describe('variableize', function () {
-    
+
     it("should lowerCamelize names-and-namespaces-like-this", function() {
       expect('names-and-namespaces-like-this'.variableize()).toEqual('namesAndNamespacesLikeThis');
     });
@@ -16,19 +16,19 @@ describe('string x', function () {
     it("should lowerCamelize namesLikeThis", function() {
       expect('namesLikeThis'.variableize()).toEqual('namesLikeThis');
     });
-    
+
     it('should return "" on ""', function () {
       expect(''.variableize()).toEqual('');
     })
-    
+
     it("should UpperCamelize namesLikeThis when passing true", function() {
       expect('namesLikeThis'.variableize(true)).toEqual('NamesLikeThis');
     });
-    
+
     it("should lower camelize names like this", function () {
       expect('names like this'.variableize()).toEqual('namesLikeThis');
     });
-    
+
     it('should prepend an underscore to avoid starting with a number', function () {
       expect('123'.variableize()).toEqual('_123');
     })

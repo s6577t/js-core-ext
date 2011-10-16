@@ -24,15 +24,16 @@ describe('number extensions', function () {
       [1001, '1001st'],
       [1012, '1012th'],
     ];
-    
+
     it('should correctly ordinalize numbers', function () {
       examples.forEach(function (example) {
         expect(example[0].ordinalize()).toBe(example[1]);
       })
     });
-    
+
     it('should ordinalize floats not to ordinalize', function () {
       expect((2.25).ordinalize()).toBe('2.25');
     })
   })
+
 })

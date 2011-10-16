@@ -1,0 +1,5 @@
+supplement.js is included unmodified.
+
+InflectionJS is included with modifications:
+* ordinalize has been removed, corrected, reimplemented in string-ext and specs written in Jasmine
+* variable names have been changed from the underscore_convention to lowerCamelCase

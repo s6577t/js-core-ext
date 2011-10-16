@@ -1,0 +1,10 @@
+Cup.define do
+
+  name 'js-core-ext'
+  version '0.1.7'
+  licence 'licence.txt'
+
+  javascripts do
+    vendor 'jasmine.js', :*
+  end
+end

@@ -1,5 +1,61 @@
-;
 /*
+js-core-ext licence
+===================
+
+Copyright (C) 2011 by sjltaylor
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicence, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+Supplement-js license
+=====================
+
+supplement.js JavaScript Extras, version: 0.1.1
+(c) 2011 Oliver Nightingale
+
+Released under MIT license.
+
+
+InflectionJS licence
+====================
+
+Copyright (c) 2010 Ryan Schuft (ryan.schuft@gmail.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/;/*
 Copyright (c) 2010 Ryan Schuft (ryan.schuft@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -74,13 +130,16 @@ THE SOFTWARE.
     String.classify() == String
       renders an underscored plural word into its camel cased singular form
 
-    String.foreign_key(dropIdUbar) == String
+    String.foreignKey(dropIdUbar) == String
       renders a class name (camel cased singular noun) into a foreign key
       defaults to seperating the class from the id with an underbar unless
       you pass true
 
     String.ordinalize() == String
       renders all numbers found in the string into their sequence like "22nd"
+
+      This libraries implementation of ordinalize failed to meet specs and has been reimplemented as part of string-ext
+
 */
 
 /*
@@ -103,7 +162,7 @@ InflectionJS =
       This is a list of nouns that use the same form for both singular and plural.
       This list should remain entirely in lower case to correctly match Strings.
     */
-    uncountable_words: [
+    uncountableWords: [
         'equipment', 'information', 'rice', 'money', 'species', 'series',
         'fish', 'sheep', 'moose', 'deer', 'news'
     ],
@@ -111,7 +170,7 @@ InflectionJS =
     /*
       These rules translate from the singular form of a noun to its plural form.
     */
-    plural_rules: [
+    pluralRules: [
         [new RegExp('(m)an$', 'gi'),                 '$1en'],
         [new RegExp('(pe)rson$', 'gi'),              '$1ople'],
         [new RegExp('(child)$', 'gi'),               '$1ren'],
@@ -137,7 +196,7 @@ InflectionJS =
     /*
       These rules translate from the plural form of a noun to its singular form.
     */
-    singular_rules: [
+    singularRules: [
         [new RegExp('(m)en$', 'gi'),                                                       '$1an'],
         [new RegExp('(pe)ople$', 'gi'),                                                    '$1rson'],
         [new RegExp('(child)ren$', 'gi'),                                                  '$1'],
@@ -169,7 +228,7 @@ InflectionJS =
     /*
       This is a list of words that should not be capitalized for title case
     */
-    non_titlecased_words: [
+    nonTitlecasedWords: [
         'and', 'or', 'nor', 'a', 'an', 'the', 'so', 'but', 'to', 'of', 'at',
         'by', 'from', 'into', 'on', 'onto', 'off', 'out', 'in', 'over',
         'with', 'for'
@@ -178,16 +237,16 @@ InflectionJS =
     /*
       These are regular expressions used for converting between String formats
     */
-    id_suffix: new RegExp('(_ids|_id)$', 'g'),
+    idSuffix: new RegExp('(_ids|_id)$', 'g'),
     underbar: new RegExp('_', 'g'),
-    space_or_underbar: new RegExp('[\ _]', 'g'),
+    spaceOrUnderbar: new RegExp('[\ _]', 'g'),
     uppercase: new RegExp('([A-Z])', 'g'),
-    underbar_prefix: new RegExp('^_'),
-    
+    underbarPrefix: new RegExp('^_'),
+
     /*
       This is a helper method that applies rules based replacement to a String
       Signature:
-        InflectionJS.apply_rules(str, rules, skip, override) == String
+        InflectionJS.applyRules(str, rules, skip, override) == String
       Arguments:
         str - String - String to modify and return based on the passed rules
         rules - Array: [RegExp, String] - Regexp to match paired with String to use for replacement
@@ -196,9 +255,9 @@ InflectionJS =
       Returns:
         String - passed String modified by passed rules
       Examples:
-        InflectionJS.apply_rules("cows", InflectionJs.singular_rules) === 'cow'
+        InflectionJS.applyRules("cows", InflectionJs.singularRules) === 'cow'
     */
-    apply_rules: function(str, rules, skip, override)
+    applyRules: function(str, rules, skip, override)
     {
         if (override)
         {
@@ -262,36 +321,36 @@ if (!Array.prototype.indexOf)
   You can override this list for all Strings or just one depending on if you
   set the new values on prototype or on a given String instance.
 */
-if (!String.prototype._uncountable_words)
+if (!String.prototype._uncountableWords)
 {
-    String.prototype._uncountable_words = InflectionJS.uncountable_words;
+    String.prototype._uncountableWords = InflectionJS.uncountableWords;
 }
 
 /*
   You can override this list for all Strings or just one depending on if you
   set the new values on prototype or on a given String instance.
 */
-if (!String.prototype._plural_rules)
+if (!String.prototype._pluralRules)
 {
-    String.prototype._plural_rules = InflectionJS.plural_rules;
+    String.prototype._pluralRules = InflectionJS.pluralRules;
 }
 
 /*
   You can override this list for all Strings or just one depending on if you
   set the new values on prototype or on a given String instance.
 */
-if (!String.prototype._singular_rules)
+if (!String.prototype._singularRules)
 {
-    String.prototype._singular_rules = InflectionJS.singular_rules;
+    String.prototype._singularRules = InflectionJS.singularRules;
 }
 
 /*
   You can override this list for all Strings or just one depending on if you
   set the new values on prototype or on a given String instance.
 */
-if (!String.prototype._non_titlecased_words)
+if (!String.prototype._nonTitlecasedWords)
 {
-    String.prototype._non_titlecased_words = InflectionJS.non_titlecased_words;
+    String.prototype._nonTitlecasedWords = InflectionJS.nonTitlecasedWords;
 }
 
 /*
@@ -312,10 +371,10 @@ if (!String.prototype.pluralize)
 {
     String.prototype.pluralize = function(plural)
     {
-        return InflectionJS.apply_rules(
+        return InflectionJS.applyRules(
             this,
-            this._plural_rules,
-            this._uncountable_words,
+            this._pluralRules,
+            this._uncountableWords,
             plural
         );
     };
@@ -339,10 +398,10 @@ if (!String.prototype.singularize)
 {
     String.prototype.singularize = function(singular)
     {
-        return InflectionJS.apply_rules(
+        return InflectionJS.applyRules(
             this,
-            this._singular_rules,
-            this._uncountable_words,
+            this._singularRules,
+            this._uncountableWords,
             singular
         );
     };
@@ -405,7 +464,7 @@ if (!String.prototype.underscore)
         for (var i = 0; i < str_path.length; i++)
         {
             str_path[i] = str_path[i].replace(InflectionJS.uppercase, '_$1');
-            str_path[i] = str_path[i].replace(InflectionJS.underbar_prefix, '');
+            str_path[i] = str_path[i].replace(InflectionJS.underbarPrefix, '');
         }
         str = str_path.join('/').toLowerCase();
         return str;
@@ -430,7 +489,7 @@ if (!String.prototype.humanize)
     String.prototype.humanize = function(lowFirstLetter)
     {
         var str = this.toLowerCase();
-        str = str.replace(InflectionJS.id_suffix, '');
+        str = str.replace(InflectionJS.idSuffix, '');
         str = str.replace(InflectionJS.underbar, ' ');
         if (!lowFirstLetter)
         {
@@ -479,7 +538,7 @@ if (!String.prototype.dasherize)
     String.prototype.dasherize = function()
     {
         var str = this;
-        str = str.replace(InflectionJS.space_or_underbar, '-');
+        str = str.replace(InflectionJS.spaceOrUnderbar, '-');
         return str;
     };
 }
@@ -508,7 +567,7 @@ if (!String.prototype.titleize)
             var d = str_arr[x].split('-');
             for (var i = 0; i < d.length; i++)
             {
-                if (this._non_titlecased_words.indexOf(d[i].toLowerCase()) < 0)
+                if (this._nonTitlecasedWords.indexOf(d[i].toLowerCase()) < 0)
                 {
                     d[i] = d[i].capitalize();
                 }
@@ -588,19 +647,19 @@ if (!String.prototype.classify)
 /*
   This function adds foreign key support to every String object
     Signature:
-      String.foreign_key(dropIdUbar) == String
+      String.foreignKey(dropIdUbar) == String
     Arguments:
       dropIdUbar - boolean (optional) - default is to seperate id with an
         underbar at the end of the class name, you can pass true to skip it
     Returns:
       String - camel cased singular class names become underscored with id
     Examples:
-      "MessageBusProperty".foreign_key() == "message_bus_property_id"
-      "MessageBusProperty".foreign_key(true) == "message_bus_propertyid"
+      "MessageBusProperty".foreignKey() == "message_bus_property_id"
+      "MessageBusProperty".foreignKey(true) == "message_bus_propertyid"
 */
-if (!String.prototype.foreign_key)
+if (!String.prototype.foreignKey)
 {
-    String.prototype.foreign_key = function(dropIdUbar)
+    String.prototype.foreignKey = function(dropIdUbar)
     {
         var str = this;
         str = str.demodulize().underscore() + ((dropIdUbar) ? ('') : ('_')) + 'id';
@@ -609,9 +668,7 @@ if (!String.prototype.foreign_key)
 }
 
 
-;
-;
-// supplement.js JavaScript Extras, version: 0.1.0
+;;// supplement.js JavaScript Extras, version: 0.1.1
 // (c) 2011 Oliver Nightingale
 //
 //  Released under MIT license.
@@ -928,6 +985,32 @@ supplement.defineMethod(Array.prototype, 'drop', function (n) { "use strict";
 
   return this.slice(n)
 })
+
+/**
+ * ## Array.prototype.pluck
+ * Returns array of values for passed property / method name on each member.
+ *
+ * If the element in the array has a property with a matching name it will be returned,
+ * if the property is a function then it will be called, without any parameters, and the
+ * result will be returned.  If no property matches then undefined will be returned.
+ *
+ * @param {propname} the name of a property or method to collect from each member
+ * @throws {TypeError} when called without a property name
+ * @returns {Array} an array containing the properties and/or result of method calls
+ */
+supplement.defineMethod(Array.prototype, 'pluck', function (n) { "use strict";
+  if (!n || typeof n !== 'string') throw new TypeError ()
+
+  return this.map(function (member) {
+    var value
+    if(member[n] !== undefined) {
+      value = typeof member[n] == 'function' ? member[n]() : member[n];
+    } else {
+      value = undefined
+    }
+    return value
+  })
+})
 /**
  * ## Function.prototype.singleUse
  * Returns a version of the function that can only be called once, after which the function will behave
@@ -1113,7 +1196,7 @@ supplement.defineMethod(Object, 'values', function (obj) { "use strict";
 });
 
 /**
- * Object.provide
+ * ## Object.provide
  * Returns a property of an object which is nested arbitrarily deep within another object.  If at any point
  * along the chain of properties it finds a property that doesn't exist it populates that property with a 
  * blank object and continues.
@@ -1141,176 +1224,165 @@ supplement.defineMethod(Object, 'provide', function (obj) { "use strict";
   })
   return node
 });
-;
-;
-/*
-Copyright(c) 2011 Sam Taylor, released under MIT License.
-*/
 
-(function () {
+/**
+ * ## Object.typeOf
+ * A more robust version of the native typeof command.  This function will reliably return the correct type
+ * of the passed object.  It is able to distinguish between arrays, arguments and plain objects for example.
+ *
+ * @params {Object} any kind of object for which you want to know its type.
+ * @returns {String} the string type of the object.
+ *
+ * ### Example
+ *     Object.typeOf([]) // returns 'array'
+ *     Object.typeOf({}) // returns 'object'
+ *     Object.typeOF(1)  // returns 'number'
+ */
+supplement.defineMethod(Object, 'typeOf', function (obj) { "use strict";
+  return Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase()
+});
 
-  supplement.defineMethod(Array.prototype, 'copy', function () {
-    return Array.toArray(this);
-  });
-  
-  supplement.defineMethod(Array.prototype, 'exclude', function (obj) {
-    var i = this.indexOf(obj);
-    if (i >= 0) return this.splice(i, 1);
-    return this;
-  });
-  
-  supplement.defineMethod(Array.prototype, 'remove', function (obj) {
-    delete this[this.indexOf(obj)];
-    return this;
-  });
-  
-  supplement.defineMethod(Array.prototype, 'contains', function (obj) {
-    return !!this.detect(function (e) {
-      return e === obj;
-    });
-  });
-  
-  supplement.defineMethod(Array.prototype, 'isEmpty', function (obj) {
-    return this.length === 0;
-  });
-  
-  supplement.defineMethod(Array.prototype, 'first', function (obj) {
-    return this[0];
-  });
-  
-  supplement.defineMethod(Array.prototype, 'last', function (obj) {
-    return this[this.length - 1];
-  });
-  
-})();
-;
-;
-;
-/*
+/**
+ * ## Object.isArray
+ * ## Object.isFunction
+ * ## Object.isString
+ * ## Object.isNumber
+ * ## Object.isBoolean
+ * ## Object.isArguments
+ * ## Object.isRegexp
+ * ## Object.isDate
+ * Convinience wrappers around `Object.typeOf`.  For checking arrays it is better to use the native
+ * `Array.isArray` method.
+ *
+ * @see Array.isArray
+ * @param {Object} the object to test
+ * @returns {Boolean} true only if the object is of the correct type
+ */
+(["Array", "Function", "String", "Number", "Boolean", "Regexp", "Date"]).forEach(function (type) {
+  supplement.defineMethod(Object, 'is' + type, function (obj) { "use strict";
+    return Object.typeOf(obj) == type.toLowerCase()
+  })
+})
+;;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 function uuid () {
-	// from: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
-	// http://www.ietf.org/rfc/rfc4122.txt
-	var s = [];
-	var hexDigits = "0123456789ABCDEF";
-	for (var i = 0; i < 32; i++) {
-		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-	}
-	s[12] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
-	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+  // from: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+  // http://www.ietf.org/rfc/rfc4122.txt
+  var s = [];
+  var hexDigits = "0123456789ABCDEF";
+  for (var i = 0; i < 32; i++) {
+    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+  }
+  s[12] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+  s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
 
-	var uuid = s.join("");
-	return uuid;
+  var uuid = s.join("");
+  return uuid;
 };
 
-function extend (object, options) {
-  
-  options = options || {};
-  object = object || {};
-  
-  return {
-    withObject: function () {
-      
-      Array.toArray(arguments).forEach(function(other) {
-        for (var member in other) {
-          if (options.overwrite || (typeof object[member] === 'undefined')) {
-            var name = (typeof options.prefix === 'undefined' || options.prefix === null) ? member : "" + options.prefix + member;
-            object[name] = other[member];
-          }           
-        }
-      });
-      
-      return object;
-    },
-    mixin: function (mixin) {
-      return typeof mixin === 'function' ? this.withObject(new mixin) : this.withObject(mixin);
-    }
+function proxyFunction (thiz, phunction) {
+  return function () {
+    return phunction.apply(thiz, arguments);
   };
-};
-
-function overwrite (object) {
-  return extend(object, {overwrite: true});
 };
 
 // for use with option enabled methods
 function defaultsFor (options, defaults) {
-  return extend(options).withObject(defaults);
-};
-
-function proxyFunction (context, phunction) {
-  return function () {
-    return phunction.apply(context, arguments);
-  };
-};
-
-override = (function () {
-  function ovrdFunction (f, g) {
-    return function () {
-      var thiz = this;
-      var args = Array.toArray(arguments);
-
-      args.unshift(function () {
-        var baseArgs = (arguments.length > 0) ? Array.toArray(arguments) : args.slice(1);
-        return f.apply(thiz, baseArgs);
-      });
-
-      return g.apply(thiz, args);
-    }
-  }
-  
-  function ovrdObj (obj, overrides) {
-    for (var o in overrides) {
-      if (typeof obj[o] === 'function' && typeof overrides[o] === 'function') {
-        obj[o] = ovrdFunction(obj[o], overrides[o]);
-      } else {
-        throw new Error('no function to override: ' + o);
-      }
-    }
-    return obj;
-  }
-
-  return function (a) {
-    return {
-      withObject: function (b) {
-        if (typeof a === 'function' && typeof b === 'function') {
-          return ovrdFunction(a, b);
-        } 
-        return ovrdObj(a, b);
-      }
-    }
-  }
-})();
-
-function shallowCopy (obj) {
-  return jQuery.extend({}, obj);
-};
-
-function deepCopy (obj) {
-  return jQuery.extend(true, {}, obj);
+  return Object.extend(options).withObject(defaults);
 };
 
 function NotImplemented () {
   throw "Not Implemented";
 };
-;
-;
-/*
+;;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 (function () {
-  
-  supplement.defineMethod(Number.prototype, 'toDps', function (n) {
-    return parseFloat(this.toFixed(n));
-  });
   
   supplement.defineMethod(Number.prototype, 'ordinalize', function (n) {
     return (this).toString().ordinalize();
   });
 })()
-;
-;
-/*
+;;/*
+Copyright(c) 2011 Sam Taylor, released under MIT License.
+*/
+(function() {
+  supplement.defineMethod(Object, 'extend', function (object, options) {
+
+    options = options || {};
+    object = object || {};
+
+    return {
+      withObject: function () {
+
+        Array.toArray(arguments).forEach(function(other) {
+          for (var member in other) {
+            if (options.overwrite || (typeof object[member] === 'undefined')) {
+              var name = (typeof options.prefix === 'undefined' || options.prefix === null) ? member : "" + options.prefix + member;
+              object[name] = other[member];
+            }
+          }
+        });
+
+        return object;
+      },
+      mixin: function (mixin) {
+        return typeof mixin === 'function' ? this.withObject(new mixin) : this.withObject(mixin);
+      }
+    };
+  });
+
+  supplement.defineMethod(Object, 'overwrite', function (object) {
+    return Object.extend(object, {overwrite: true});
+  });
+
+  supplement.defineMethod(Object, 'override', (function () {
+    function ovrdFunction (f, g) {
+      return function () {
+        var thiz = this;
+        var args = Array.toArray(arguments);
+
+        args.unshift(function () {
+          var baseArgs = (arguments.length > 0) ? Array.toArray(arguments) : args.slice(1);
+          return f.apply(thiz, baseArgs);
+        });
+
+        return g.apply(thiz, args);
+      }
+    }
+
+    function ovrdObj (obj, overrides) {
+      for (var o in overrides) {
+        if (typeof obj[o] === 'function' && typeof overrides[o] === 'function') {
+          obj[o] = ovrdFunction(obj[o], overrides[o]);
+        } else {
+          throw new Error('no function to override: ' + o);
+        }
+      }
+      return obj;
+    }
+
+    return function (a) {
+      return {
+        withObject: function (b) {
+          if (typeof a === 'function' && typeof b === 'function') {
+            return ovrdFunction(a, b);
+          }
+          return ovrdObj(a, b);
+        }
+      }
+    }
+  })());
+
+  supplement.defineMethod(Object, 'shallowCopy', function (obj) {
+    return jQuery.extend({}, obj);
+  });
+
+  supplement.defineMethod(Object, 'deepCopy', function (obj) {
+    return jQuery.extend(true, {}, obj);
+  });
+})();;;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 (function () {
@@ -1341,7 +1413,9 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
   });
 
   supplement.defineMethod(String.prototype, 'variableize', function (globalName) {
-    var matches = this.split(/([^a-z])/g)
+    var input = this;
+        
+    var matches = input.split(/([^a-z])/g)
     var parts = [];
         
     for (var i = 0; i < matches.length; i++) {
@@ -1358,37 +1432,25 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
       }
     }
     
-    var str = parts.join('');
+    var str = parts.filter(function (s) {
+      return !s.match(/\s+/g) 
+    }).map(function (s) {
+      return s.titleize()
+    }).join('');
 
     if (str[0]) {
       str = str.split('');
       str[0] = globalName ? str[0].toUpperCase() : str[0].toLowerCase();
       str = str.join('');
     }
-    
-    return str;    
+
+    // if it starts with a number
+    if (str.match(/^\d.*/)) {
+      str = '_' + str;
+    }
+
+    return str;
   });  
-
-  supplement.defineMethod(String.prototype, 'startsWith', function(s) {
-    return new RegExp('^'+s).test(this);
-  });
-  
-  supplement.defineMethod(String.prototype, 'contains', function(s) {
-    return new RegExp(s).test(this);
-  });
-
-  supplement.defineMethod(String.prototype, 'endsWith', function(s) {
-    return this.substr(s.length) === s;
-  });
-
-  supplement.defineMethod(String.prototype, 'squash', function () {
-    return this.replace(/^\s+|\s+$/g, '');
-  });
-
-  supplement.defineMethod(String.prototype, 'enquote', function (quoteCharacter) {
-    var q =  quoteCharacter || "'"
-    return q + this + q;
-  });
 
   // taken from http://stackoverflow.com/questions/6857552/regular-expression-in-crockfords-string-supplant
   supplement.defineMethod(String.prototype, 'supplant', function (dictionary) {
@@ -1402,14 +1464,7 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
       ? replacement : target;
     });
   });
-  
-  supplement.defineMethod(String.prototype, 'toFloat', function () {
-    return parseFloat(this);
-  });
-  
-  supplement.defineMethod(String.prototype, 'toInteger', function () {
-    return parseInt(this);
-  });  
+ 
   
   /*
     This function adds ordinalize support to every String object
