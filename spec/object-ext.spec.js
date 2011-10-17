@@ -99,13 +99,22 @@ describe('Object.overwrite', function () {
 });
 
 describe('Object.override', function () {
+  it("should throw an error if there is not function to override", function() {
+    expect(function () {
+      Object.override({}).withObject({
+        f : function () {}
+      });
+    }).toThrow();
+  });
   describe("the new method implemenation", function() {
     it("should work with the same method signature as the original", function () {
 
       var args, overrideArgs;
 
       var obj = {
-        func: function () { args = Array.toArray(arguments); }
+        func: function () { 
+          args = Array.toArray(arguments);
+        }
       }
 
       Object.override(obj).withObject({
@@ -173,9 +182,9 @@ describe('Object.override', function () {
           overrideContext = this;
         }
       })
-      
+
       obj.func();
-      
+
       expect(overrideContext).toBe(obj);
     });
   });
