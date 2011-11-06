@@ -1,5 +1,4 @@
-/*
-js-core-ext licence
+/*js-core-ext licence
 ===================
 
 Copyright (C) 2011 by sjltaylor
@@ -54,7 +53,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
 */;/*
 Copyright (c) 2010 Ryan Schuft (ryan.schuft@gmail.com)
 
@@ -668,7 +666,7 @@ if (!String.prototype.foreignKey)
 }
 
 
-;;// supplement.js JavaScript Extras, version: 0.1.2
+;// supplement.js JavaScript Extras, version: 0.1.2
 // (c) 2011 Oliver Nightingale
 //
 //  Released under MIT license.
@@ -1459,7 +1457,7 @@ supplement.defineMethod(String.prototype, 'toInteger', function () {
 });
 
 
-;;/*
+;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 function uuid () {
@@ -1491,7 +1489,7 @@ function defaultsFor (options, defaults) {
 function NotImplemented () {
   throw "Not Implemented";
 };
-;;/*
+;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 (function () {
@@ -1500,7 +1498,7 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
     return (this).toString().ordinalize();
   });
 })()
-;;/*
+;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 (function() {
@@ -1582,7 +1580,7 @@ Copyright(c) 2011 Sam Taylor, released under MIT License.
   supplement.defineMethod(Object, 'deepCopy', function (obj) {
     return jQuery.extend(true, {}, obj);
   });
-})();;;/*
+})();;/*
 Copyright(c) 2011 Sam Taylor, released under MIT License.
 */
 (function () {

@@ -12,18 +12,10 @@ beforeEach(function() {
       return this.actual instanceof ctor;
     },
     toContain: function (a) {
-      return this.actual.contains(a);
+      return !!~this.actual.indexOf(a);
     },
     toBeEmpty: function () {
       return this.actual.isEmpty();
-    },
-    toThrowAnError: function () {
-      try {
-        this.actual()
-      } catch (e) {
-        return e instanceof Error;
-      }
-      return false;
     }
   });
 });
